@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="//cdn.jsdelivr.net/g/d3js">
+      </script>
+    <script type="text/javascript" src="gyro.min.js">
+      </script>
+  </head>
+  <body>
+    <div>
+      <ul>
+      </ul>
+    </div>
+    <script>
+      ;(function(){
+        var pos = ['x','y','z'],
+            ang = ['alpha','beta','gamma'];
+        
+        var list = d3.select('ul');
+        gyro.startTracking(function(o) {
+          //o = {x: 12,y: 45,z: 3,alpha: .2,beta: .6,gamma: .45};
+          list.selectAll('li')
+            .data(function(){
+              return d3.merge([pos,ang])
+                .map( function(d){
+                  return {
+                    key:d,
+                    value: o[d]
+                  }
+                })
+            })
+            .call( function(s){
+              s.enter()
+               .append('li')
+            })
+            .each( function(d){
+              d3.select(this).html( function(){
+                return '<b>'+d.key+'</b> - ' + d.value
+              })
+            })
+          
+          })        
+      })();
+      
+    </script>
+    
+  </body>
+</html>
